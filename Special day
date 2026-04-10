@@ -6,41 +6,68 @@
     <title>يوم مميز</title>
     <style>
         :root { 
-            --bg-soft-cream: #fbfbf8; /* لون خلفية كريمي هادي جداً */
-            --card-white: rgba(255, 255, 255, 0.85); /* كارت أبيض شفاف */
-            --text-dark: #333333; /* لون نص أسود هادي */
-            --soft-gold: #bca13a; /* لون ذهبي هادي للزراير والتهنئة */
-            --star-white: rgba(255, 255, 255, 0.6); /* نجوم باهتة وخافتة */
+            --space-bg: linear-gradient(to bottom, #020107 0%, #050b1a 50%, #0a1628 100%);
+            --soft-blue: #48cae4; 
         }
         
-        body { margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--bg-soft-cream); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; position: relative; }
-        
-        /* تأثير النجوم المتلألئة الخافتة */
-        .stars { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 0; }
-        .star { position: absolute; background: var(--star-white); border-radius: 50%; animation: twinkle 4s infinite linear; }
-        @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.6); } 50% { opacity: 1; transform: scale(1); } }
+        body { 
+            margin: 0; padding: 0; height: 100vh; 
+            display: flex; justify-content: center; align-items: center; 
+            background: var(--space-bg); 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            overflow: hidden; position: relative;
+        }
 
-        /* الجملة في الزاوية العلوية اليسرى */
-        .corner-text { position: absolute; top: 15px; left: 15px; font-size: 14px; color: var(--text-dark); font-weight: normal; z-index: 20; font-family: 'Courier New', Courier, monospace; /* خط يشبه الآلة الكاتبة وواضح */ }
+        .stars-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 0; }
+        .star { 
+            position: absolute; background: white; border-radius: 50%; 
+            animation: twinkle var(--d) infinite ease-in-out; 
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
 
-        .card { background: var(--card-white); padding: 45px 35px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); z-index: 10; width: 85%; max-width: 450px; text-align: center; border: 1px solid rgba(0,0,0,0.03); display: none; backdrop-filter: blur(5px); /* تأثير ضبابي خفيف وجميل */ }
-        .active-card { display: block; animation: fadeIn 1s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        /* تنسيق الترجمة في الخلفية */
+        #lyrics-container {
+            position: absolute; width: 100%; text-align: center;
+            bottom: 15%; color: white; font-size: 18px;
+            opacity: 0.4; z-index: 1; transition: opacity 1s;
+            font-style: italic; text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            pointer-events: none;
+        }
 
-        h1 { color: var(--text-dark); font-size: 24px; line-height: 1.6; margin-bottom: 30px; font-weight: 500; }
-        .celebrate-h1 { color: var(--soft-gold); font-weight: bold; }
+        .corner-text { position: absolute; top: 20px; left: 20px; font-size: 13px; color: #fff; opacity: 0.6; z-index: 20; font-family: 'Courier New', monospace; }
 
-        button { padding: 14px 35px; font-size: 18px; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background: var(--soft-gold); color: white; margin-top: 25px; }
-        button:hover { background: #a68c33; transform: scale(1.02); }
+        .card { 
+            background: rgba(255, 255, 255, 0.08); 
+            padding: 45px 35px; border-radius: 35px; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
+            z-index: 10; width: 80%; max-width: 400px; text-align: center; 
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none; 
+        }
+        .active-card { display: block; animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        #player { display: none; }
+        h1 { color: #ffffff; font-size: 21px; line-height: 1.6; margin-bottom: 30px; font-weight: 400; }
+        .celebrate-h1 { color: #ffd700; font-weight: bold; }
+
+        button { 
+            padding: 14px 40px; font-size: 17px; font-weight: 600; 
+            border: none; border-radius: 30px; cursor: pointer; 
+            background: var(--soft-blue); color: #020107; 
+        }
+
+        #player { position: absolute; top: -100px; left: -100px; visibility: hidden; }
     </style>
 </head>
 <body>
 
-<div class="stars" id="starContainer"></div>
+<div class="stars-container" id="stars"></div>
 <div id="player"></div>
-
+<div id="lyrics-container"></div>
 <div class="corner-text">You are my yellow person💛</div>
 
 <div class="card active-card" id="page1">
@@ -59,25 +86,37 @@
         <h1 class="celebrate-h1">كل سنه وانت طيبه يا دينا ❤️🥳 🥰</h1>
         <h1>و ربنا يجعلها سنه سعيدة عليكي يارب ♥️</h1>
         <h1>يارب اليوم يكون مميز و سعيد ليكي♥️</h1>
-        <p style="font-size: 18px; color: #666666;">وحابب أفكرك إن أنا موجود علشانك دايماً.</p>
+        <p style="font-size: 17px; color: #e0e0e0; opacity: 0.8;">وحابب أفكرك إن أنا موجود علشانك دايماً.</p>
     </div>
 </div>
 
 <script>
     function createStars() {
-        const container = document.getElementById('starContainer');
-        for (let i = 0; i < 180; i++) {
+        const container = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.width = Math.random() * 2 + 'px'; /* نجوم أصغر وخافتة */
-            star.style.height = star.style.width;
+            const size = (Math.random() * 2 + 1) + 'px';
+            star.style.width = size; star.style.height = size;
             star.style.left = Math.random() * 100 + 'vw';
             star.style.top = Math.random() * 100 + 'vh';
-            star.style.animationDelay = Math.random() * 4 + 's';
+            star.style.setProperty('--d', (Math.random() * 2 + 2) + 's');
             container.appendChild(star);
         }
     }
     createStars();
+
+    // كلمات الأغنية المترجمة بالتوقيت (بالثواني)
+    const lyrics = [
+        { time: 33, text: "انظري إلى النجوم.." },
+        { time: 36, text: "انظري كيف تشع لأجلكِ" },
+        { time: 42, text: "ولكل شيء تفعلينه" },
+        { time: 48, text: "نعم، لقد كانت كلها صفراء" },
+        { time: 54, text: "لقد جئتُ من أجلكِ" },
+        { time: 58, text: "وكتبتُ أغنية لأجلكِ" },
+        { time: 64, text: "ولكل الأشياء التي تقومين بها" },
+        { time: 70, text: "وكانت تسمى 'Yellow'" }
+    ];
 
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
@@ -87,21 +126,42 @@
     var player;
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            height: '0', width: '0',
-            videoId: 'yKNxeF4KMsY', 
+            height: '0', width: '0', videoId: 'yKNxeF4KMsY',
+            playerVars: { 'playsinline': 1, 'start': 33, 'enablejsapi': 1 },
             events: { 'onReady': onPlayerReady }
         });
     }
 
-    function onPlayerReady(event) { }
+    function onPlayerReady(event) {}
 
     function startExperience() {
-        player.playVideo();
+        if (player && typeof player.playVideo === 'function') {
+            player.seekTo(33);
+            player.playVideo();
+            updateLyrics(); // بدء تحديث الترجمة
+        }
         nextPage(1, 2);
     }
 
+    function updateLyrics() {
+        setInterval(() => {
+            const currentTime = player.getCurrentTime();
+            const currentLine = lyrics.find((line, index) => {
+                const nextLine = lyrics[index + 1];
+                return currentTime >= line.time && (!nextLine || currentTime < nextLine.time);
+            });
+            
+            if (currentLine) {
+                document.getElementById('lyrics-container').innerText = currentLine.text;
+                document.getElementById('lyrics-container').style.opacity = 0.5;
+            } else {
+                document.getElementById('lyrics-container').style.opacity = 0;
+            }
+        }, 500);
+    }
+
     function nextPage(current, next) {
-        document.getElementById('page' + current).classList.remove('active-card');
+        document.getElementById('page' + current).style.display = 'none';
         document.getElementById('page' + next).classList.add('active-card');
     }
 </script>
